@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Финальный Видеочат</title>
+  <style>
+    body { font-family: sans-serif; background: #181818; color: white; text-align: center; margin: 0; padding: 2em; }
+    input, button { margin: 0.5em; padding: 0.7em; font-size: 1em; }
+    video { width: 300px; margin: 0.5em; border-radius: 10px; }
+    .dark { background: #181818; color: white; }
+  </style>
+</head>
+<body>
+  <h1>Финальный видеочат</h1>
+  <input id="name" placeholder="Ваше имя" />
+  <input id="avatar" placeholder="🧑" maxlength="2" />
+  <input id="room" placeholder="room123" />
+  <button onclick="join()">Войти</button>
+  <div id="chat" style="display:none;">
+    <div id="videos"></div>
+    <textarea id="log" rows="10" cols="50" readonly></textarea><br/>
+    <input id="text" placeholder="Сообщение" />
+    <button onclick="send()">Отправить</button>
+  </div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+let socket, roomId, name, avatar;
+function join() {
+  name = document.getElementById("name").value;
+  avatar = document.getElementById("avatar").value || "🙂";
+  roomId = document.getElementById("room").value || "room123";
+  document.getElementById("chat").style.display = "block";
+
+  socket = io();
+  socket.emit("join-room", { roomId, user: { name, avatar } });
+
+  socket.on("chat-message", data => {
+    log(`${data.user.avatar} ${data.user.name}: ${data.text}`);
+  });
+
+  socket.on("user-connected", ({ id, user }) => log(`🟢 ${user.name} вошёл`));
+  socket.on("user-disconnected", id => log(`🔴 Пользователь вышел`));
+  socket.on("user-list", users => console.log("🧑‍🤝‍🧑", users));
+}
+function send() {
+  const msg = document.getElementById("text").value;
+  if (msg.trim()) socket.emit("message", msg);
+  document.getElementById("text").value = "";
+}
+function log(msg) {
+  const log = document.getElementById("log");
+  log.value += msg + "\n";
+  log.scrollTop = log.scrollHeight;
+}
+</script>
+</body>
+</html>
