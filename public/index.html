@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Голосовой чат: Финал</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Голосовой чат: Финал</h1>
+  <div id="controls">
+    <button id="micBtn">🎙 Микрофон</button>
+    <button id="screenBtn">📺 Поделиться экраном</button>
+    <button id="recordBtn">⏺ Запись</button>
+    <button id="themeBtn">🌗 Тема</button>
+  </div>
+  <div id="chat">
+    <textarea id="chatBox" readonly></textarea><br />
+    <input id="chatInput" type="text" placeholder="Ваше сообщение..." />
+    <button id="sendBtn">Отправить</button>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
